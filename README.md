@@ -4,7 +4,7 @@ Below you will find some information on how to perform common tasks.
 You can find the most recent version of this guide here.
 
 Table of Contents
-Updating to New Releases
+Updating to New Redfdfdfleases
 Sending Feedback
 Folder Structure
 Available Scripts
