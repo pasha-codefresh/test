@@ -1,40 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <!--
-      manifest.json provides metadata used when your web app is added to the
-      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+    <meta charset="UTF-8">
+    <title>Visualization of users sessions</title>
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    <style>
+        #usersPerDevicesWrap {
+            width: 700px;
+            height: 600px;
+        }
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+        #usersPerBrowsersWrap {
+            width: 1600px;
+            height: 1600px;
+        }
+
+        #sessionPerVisitorWrap {
+            width: 2000px;
+            height: 10000px;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="usersPerDevicesWrap">
+        <canvas id="usersPerDevicesChart" width="200" height="200"></canvas>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div id="usersPerBrowsersWrap">
+        <canvas id="usersPerBrowsersChart" width="200" height="200"></canvas>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div id="sessionPerVisitorWrap">
+        <canvas id="sessionPerVisitorChart" width="2000" height="10000"></canvas>
+    </div>
+
+
+</body>
+
+<script>
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('GET', '/parseUsersSessions', true);
+
+    xhr.send();
+
+    xhr.onreadystatechange = function() {
+
+        let response = {};
+
+        if (xhr.readyState !== 4) return;
+
+        if (xhr.status !== 200) {
+            alert(xhr.status + ': ' + xhr.statusText);
+        } else {
+            try {
+                response = JSON.parse(xhr.response);
+            } catch (e) {
+                alert('Sorry, the parsed data is invalid')
+            }
+        }
+
+        if(response.errorMessage){
+           alert(response.errorMessage);
+           return;
+        }
+
+        let usersPerDevices = response.data.usersPerDevices;
+        let usersPerBrowsers = response.data.usersPerBrowsers;
+        let sessionPerVisitor = response.data.sessionPerVisitor;
+
+        let usersPerDevicesCtx = document.getElementById("usersPerDevicesChart").getContext('2d');
+        let usersPerBrowsersCtx = document.getElementById("usersPerBrowsersChart").getContext('2d');
+        let sessionPerVisitorCtx = document.getElementById("sessionPerVisitorChart").getContext('2d');
+
+        new Chart(usersPerDevicesCtx, {
+            type: 'bar',
+            data: {
+                labels: getValuesList(usersPerDevices, 'name'),
+
+                datasets: [{
+                    label: 'Visitors per user device',
+                    data: getValuesList(usersPerDevices, 'value'),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            }
+        });
+
+
+       new Chart(usersPerBrowsersCtx, {
+            type: 'horizontalBar',
+            data: {
+                labels: getValuesList(usersPerBrowsers, 'name', 'value'),
+
+                datasets: [{
+                    label: 'Visitors per user agent',
+                    data: getValuesList(usersPerBrowsers, 'value'),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            }
+        });
+
+
+        new Chart(sessionPerVisitorCtx, {
+        type: 'horizontalBar',
+        data: {
+            labels: getValuesList(sessionPerVisitor, 'name', 'value'),
+
+            datasets: [{
+                label: 'summary session duration per visitor in seconds',
+                data: getValuesList(sessionPerVisitor, 'value'),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
+            }
+        }
+        });
+    };
+
+    function getValuesList(arr, propName, concatProp) {
+        let res = [];
+
+        arr.forEach(function (item) {
+            if (concatProp) {
+                res.push(`${item[propName]} = ${item[concatProp]}`)
+            } else {
+                res.push(item[propName])
+            }
+        });
+
+        return res;
+    }
+
+
+</script>
+
 </html>
