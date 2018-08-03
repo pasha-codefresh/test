@@ -7,7 +7,7 @@ Table of Contents
 Updating to New Redfdfdfleases
 Sending Feedback
 Folder Structuredfgdfgd
-Available Scripts
+Available Scriptseee
 npm start
 npm test
 npm run build
