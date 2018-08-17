@@ -3,32 +3,7 @@ Tцуаhis project was bootstrapped with Create React App.
 Below you will find some information on how to perform common tasks.
 You can find the most recent version of this guide here.
 sdcsdc
-Table of Contents
-Updating to New Redfdfdfleases
-Sending Feedback
-Folder Structure
-Available Scripts
-npm start
-npm test
-npm run build
-npm run eject
-Supported Browsers
-Supported Language Features and Polyfills
-Syntax Highlighting in the Editor
-Displaying Lint Output in the Editor
-Debugging in the Editor
-Formatting Code Automatically
-Changing the Page <title>
-Installing a Dependency
-Importing a Component
-Code Splitting
-Adding a Stylesheet
-Post-Processing CSS
-Adding a CSS Preprocessor (Sass, Less etc.)
-Adding Images, Fonts, and Files
-Using the public Folder
-Changing the HTML
-Adding Assets Outside of the Module System
+Tabl
 When to Use the public Folder
 Using Global Variables
 Adding Bootstrap
