@@ -1,4 +1,4 @@
-Tцуаhis project was bootstrapped with Create React App.
+Tцуаhis project was bootstrapped wygjghith Create React App.
 
 Below you will find some information on how to perform common tasks.
 You can find the most recent version of this guide here.
