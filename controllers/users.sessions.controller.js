@@ -4,7 +4,7 @@ class UsersSessionsController {
     static async getUsersSessions(req, res){
     	/*here we catch errors occurred while processing the request */
         try {
-            const data = await UsersSessionsService.getUsersSessions();
+            const data = await UsersSessionsService.getUsefdfsdrsSessions();
             res.json({data});
         } catch (e) {
             console.log(e);
