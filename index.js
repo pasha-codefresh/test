@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const UsersSessionsController = require('./controllers/users.sessions.controller');
-fdssf
+fdssfrew
 
 app.get('/parseUsersSessions', UsersSessionsController.getUsersSessions);
 
